@@ -43,7 +43,7 @@ class TestUserAddToCartFromProductPage(object):
         page.should_be_product_added_to_basket_message()
         page.should_be_basket_total_message()
 
-@pytest.mark.parametrize('link', [#"#http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
+@pytest.mark.parametrize('link', [#"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   #"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
                                   # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
                                   # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer3",
@@ -52,7 +52,7 @@ class TestUserAddToCartFromProductPage(object):
                                   # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer6",
                                   # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7",
                                   # "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
-                                  "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
 @pytest.mark.need_review
 def test_guest_can_add_product_to_cart(browser, link):
     # link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
