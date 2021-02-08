@@ -1,29 +1,58 @@
 from .base_page import BasePage
-from selenium.webdriver.common.by import By
-from .locators import MainPageLocators
-
-class MainPage(BasePage):
-    def add_to_basket(self):
-        login_link = self.browser.find_element(*MainPageLocators.ADD_KORZ)
-        login_link.click()
-
-    def should_be_login_link(self):
-        assert self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"
-
-    def name_tov(self):
-        tovar = self.browser.find_element(*MainPageLocators.NAME_TOVAR).text
-        assert tovar == "Coders at Work", "no kniga"
-    def cena_tov(self):
-        cena = self.browser.find_element(*MainPageLocators.CENA_TOVAR).text
-        assert cena == "£19.99", "no cena"
+from .locators import ProductPageLocators
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
+class ProductPage(BasePage):
 
- #   def should_be_name_tov(self):
- #       assert self.is_element_present(*MainPageLocators.NAME_TOVAR.text == "Coders at Work"), "no kniga"
- #   def should_be_cena_tov(self):
- #       assert self.is_element_present(*MainPageLocators.PRICE_TOVAR.text == "£19.99"), "no cena"
+    def go_to_basket_top(self):
+        link = self.browser.find_element(*ProductPageLocators.TOP_BASKET_LINK)
+        link.click()
 
-#.alert.alert-safe.alert-noicon.alert-info.fade.in strong
+    def should_be_product(self):
+        self.should_be_product_title()
+        self.should_be_product_price()
+        self.should_be_product_instock()
+        self.should_be_add_to_basket_button()
 
-#.alert.alert-safe.alert-noicon.alert-success.fade.in:nth-child(1) strong
+    def should_be_add_to_basket_button(self):
+        assert self.is_element_present(*ProductPageLocators.ADD_TO_BASKET_BUTTON), "Add to basket button is not found."
+
+    def should_be_product_title(self):
+        assert self.is_element_present(*ProductPageLocators.PRODUCT_TITLE), "Product title is not found."
+
+    def should_be_product_price(self):
+        assert self.is_element_present(*ProductPageLocators.PRODUCT_PRICE), "Product price is not found."
+
+    def should_be_product_instock(self):
+        assert self.is_element_present(
+            *ProductPageLocators.PRODUCT_INSTOCK), "Product instock availability is not found."
+
+    def add_product_to_basket(self):
+        link = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
+        link.click()
+
+    def should_be_product_added_to_basket_message(self):
+        try:
+            title = self.browser.find_element(*ProductPageLocators.PRODUCT_TITLE)
+            what_added = self.browser.find_element(*ProductPageLocators.PRODUCT_SUCCESSFULLY_ADDED_TO_BASKET)
+        except (NoSuchElementException):
+            assert False, "No message product successfully added to the basket."
+        assert title.text == what_added.text, "Message 'product was added' not contains product title."
+
+    def should_be_basket_total_message(self):
+        try:
+            price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE)
+            basket_total = self.browser.find_element(*ProductPageLocators.BASKET_TOTAL_MESSAGE)
+        except (NoSuchElementException):
+            assert False, "No message with basket total."
+        assert price.text == basket_total.text, "Price of product and basket total mismatch."
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.PRODUCT_SUCCESSFULLY_ADDED_TO_BASKET), \
+            "Success message is presented, but should not be"
+
+    def should_success_message_disappeared(self):
+        assert self.is_disappeared(*ProductPageLocators.PRODUCT_SUCCESSFULLY_ADDED_TO_BASKET), \
+            "A success message was presented, but it should have disappeared"
+
